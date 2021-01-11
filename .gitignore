@@ -1,0 +1,5 @@
+.idea/
+project/__pycache__/
+project/access_data.py
+vk_config.v2.json
+logs.txt
