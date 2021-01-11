@@ -26,15 +26,15 @@ def get_unseen_mails(imapper):
         title = ' на тему «%s».' % mail.title if mail.title else ''
         mails.append((''.join([random.choice(replies), '\n\n@all, пишет %s%s\n\n' % (from_addr, title)]),
                       mail.body, mail.attachments))
-    print(mails)
+    # print(mails)
     send_message(mails)
 
 
 def mail_receiver():
     while True:
-        print('auth')
+        # print('auth')
         imapper = easyimap.connect('imap.mail.ru', mail_login, mail_password)
-        print('ready')
+        # print('ready')
         try:
             get_unseen_mails(imapper)
         except imaplib.IMAP4.abort:
@@ -45,5 +45,5 @@ def mail_receiver():
             time.sleep(sleep_timeout)
             continue
         imapper.quit()
-        print('sleep')
+        # print('sleep')
         time.sleep(sleep_timeout)  # 30

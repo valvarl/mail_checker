@@ -65,29 +65,29 @@ def upload_docs(docs: list):
     for doc in docs:
         try:
             upload_url = bot_api.docs.getMessagesUploadServer(peer_id=2000000000 + chat_id)['upload_url']
-            print(upload_url)
+            # print(upload_url)
 
-            request = requests.post(upload_url, files={'file': doc})
-            print(request.json())
-            if 'error' in request.json().keys() and request.json()['error'] == 'no extension found':
+            request = requests.post(upload_url, files={'file': doc}).json()
+            # print(request)
+            if 'error' in request.keys() and request['error'] == 'no extension found':
                 title = 'attached' + str(len(uploaded_docs) + len(missed_docs)) + '.' + extension[doc[2]]
                 request = requests.post(upload_url, files={'file': (title, doc[1], doc[2])}).json()
                 request['title'] = title
-                print('r', request)
+                # print(request)
 
             save_doc = bot_api.docs.save(file=request['file'], title=doc[0])
-            print(save_doc)
+            # print(save_doc)
 
             doc_attach = 'doc' + str(save_doc['doc']['owner_id']) + '_' + str(save_doc['doc']['id'])
             if len(uploaded_docs) < 10:
                 uploaded_docs.append(doc_attach)
             else:
                 missed_docs.append(save_doc['doc']['title'] + ': ' + save_doc['doc']['url'])
-            print(uploaded_docs)
+            # print(uploaded_docs)
 
         except Exception:
             missed_docs.append(doc[0])
-            print(missed_docs)
+            # print(missed_docs)
             continue
 
     return uploaded_docs, missed_docs
