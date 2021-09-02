@@ -5,7 +5,7 @@ import imaplib
 import random
 import socket
 import time
-import datetime
+from datetime import datetime
 
 import easyimap
 
@@ -36,7 +36,10 @@ def get_unseen_mails(imapper):
         mails.append((''.join(
             [
                 random.choice(replies),
-                '\n\n@%s, пишет %s%s\n\n' % ('all' if datetime.datetime.now().hour >= 6 else 'online', from_addr, title)
+                '\n\n@%s, пишет %s%s\n\n' % (
+                    'all' if (datetime.utcnow().hour + 3) % 24 >= 6 else 'online',
+                    from_addr,
+                    title)
             ]
         ), ''.join(str(mail.body + ' ').split(signature)).strip() + '\n\n/////THE END/////',
                       mail.attachments))
