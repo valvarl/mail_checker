@@ -46,11 +46,13 @@ def decode_filename(file_name: str):
 def get_unseen_mails(imapper):
     mails = []
     for mail in imapper.unseen(limit=5):
+        if mail.title == 'Вход с нового устройства в аккаунт':
+            continue
         from_addr = mail.from_addr[:mail.from_addr.index('<')] + ' ' + mail.from_addr[mail.from_addr.index('<'):]
         title = ' на тему «%s».' % mail.title if mail.title else ''
         attachments = []
         regex = r'((_(_|\r|\n)*?)?(От|From).*?(Тема|Subject).*?(\r|\n)*?\n)'
-        text0 = re.sub(regex, '\n》═══════~◈~═══════《\n', mail.body, flags=re.S)
+        text0 = re.sub(regex, '\n》══════~◈~══════《\n', mail.body, flags=re.S)
         text = re.sub(signature2, '', re.sub(signature, '', text0)).strip() + '\n\n══════ஜ▲ஜ══════'
         # print([text])
         for attachment in mail.attachments:
@@ -63,10 +65,10 @@ def get_unseen_mails(imapper):
                     from_addr,
                     title)
             ]
-        ), text,
-                      attachments))
+        ), text, attachments))
     # print(mails)
-    send_message(mails)
+    if mails:
+        send_message(mails)
 
 
 def mail_receiver():
